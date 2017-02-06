@@ -1,0 +1,48 @@
+# I can't remember where I found this but I definitely butchered it from somewhere.
+# This is (mostly) not my own work
+
+## Adding Varibles 
+$Space   =  Write-Host "" 
+$Sleep   =  Start-Sleep -Seconds 3 
+ 
+## Reading list of computers from csv and loading into variable  
+## nasty hard coded file location
+$computers = Get-Content C:\Temp\Computer_list.txt 
+$path      = "C:\Temp\Computer_list.txt" 
+## verification 
+if (! (Test-Path $Path)) { 
+     
+    Write-Host "List of computers  List txt does not exist" 
+ 
+} 
+ 
+ 
+## Defining Target Path  
+## nasty hard coded OU CHANGE THESE
+$TargetOU   =  "OU=LowestOU,OU=LowerOU,OU=RootOUT,DC=testsubdomain,DC=testdomain,DC=com"  
+$countPC    = ($computers).count  
+ 
+$Space   =  Write-Host "" 
+$Sleep   =  Start-Sleep -Seconds 3 
+write-host "This Script will move Computer Accounts" -Fore green 
+write-host "Destination location is.....     " -Fore green 
+$TargetOU
+ 
+ 
+## Provide details 
+write-host "List of Computers............." -Fore green 
+$computers 
+write-host ".............................." -Fore green 
+$Space   
+$Sleep 
+ForEach( $computer in $computers){ 
+    write-host "moving computers..." 
+    Get-ADComputer $computer | 
+    Move-ADObject -TargetPath $TargetOU 
+} 
+ 
+$Space   
+$Sleep 
+write-host "Completed....................." -Fore green 
+Write-Host "Moved $countPC Servers........" 
+Write-Host "Destination OU $TargetOU......"
