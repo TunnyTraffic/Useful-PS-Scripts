@@ -2,6 +2,6 @@
 # this removes the Zone data that blocks untrusted files from being run and Unblock-Files doesn't work. Use with caution.
 # run powershell.exe as admin
 # no switches will show the zone data
-# -s will strip zone data, -d will recursively move through the dir structure
+# -d will strip zone data, -s will recursively move through the dir structure
 
-.\streams -s -d <path>
+.\streams -s -d <path>*.*
