@@ -1,4 +1,5 @@
 #constantly pings a device and outputs a failure with a timestamp
+#useful for servers that take a long time to restart following updates
 
 filter timestamp {"$(Get-Date -Format o): $_"}
 ping -t TARGETMACHINE | Select-String timed | timestamp
