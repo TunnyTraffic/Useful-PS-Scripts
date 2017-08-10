@@ -4,4 +4,4 @@
 # no switches will show the zone data
 # -d will strip zone data, -s will recursively move through the dir structure
 
-.\streams -s -d <path>*.*
+.\streams -s -d <path>\
