@@ -1,5 +1,8 @@
 #constantly pings a device and outputs a failure with a timestamp
 #useful for servers that take a long time to restart following updates
+#sample output: 2017-08-10T11:25:00.7950614+01:00: Request time out.
 
 filter timestamp {"$(Get-Date -Format o): $_"}
 ping -t TARGETMACHINE | Select-String timed | timestamp
+
+
