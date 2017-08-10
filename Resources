@@ -1,10 +1,10 @@
-#A dump file for resources
+#dump file for resources
 
-Can a SQLi style attack worn with PS arguments - sort of:
-https://blogs.msdn.microsoft.com/powershell/2006/11/22/protecting-against-malicious-code-injection/
+Can a SQLi style attack worn with PS arguments - sort of: https://blogs.msdn.microsoft.com/powershell/2006/11/22/protecting-against-malicious-code-injection/
+Sysinternals: https://docs.microsoft.com/en-us/sysinternals/downloads/
+PS GUI creator: https://poshgui.com/
+Write-Host is bad: http://www.jsnover.com/blog/2013/12/07/write-host-considered-harmful/
+Graphing in PS: http://jdhitsolutions.com/blog/powershell/2697/powershell-console-graphing-revised/
+Powershell Proxy (log in required): https://www.sans.org/webcasts/powershell-proxy-105415/
+One line webclient: https://pen-testing.sans.org/blog/2017/03/08/pen-test-poster-white-board-powershell-one-line-web-client
 
-Sysinternals:
-https://docs.microsoft.com/en-us/sysinternals/downloads/
-
-PS GUI creator:
-https://poshgui.com/
