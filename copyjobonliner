@@ -1,0 +1,3 @@
+#copy specified folders
+
+GCI C:\Users\*\Desktop -Directory | ForEach { Copy-Item -Path $_.FullName -Destination "\\server\share\$($_.Parent.BaseName)\Desktop" -Force -Recurse }
