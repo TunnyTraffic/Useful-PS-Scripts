@@ -1,0 +1,63 @@
+# hardcoded, dirty, but work-able copy job with transcript and failure log 
+
+$computers = Get-Content "pathtoclientlist.txt"
+$fileToCopy = "path to file 1"
+$fileToCopy2 = "path to file 2"
+$fileToCopy3 = "path to file 3"
+
+$ErrorActionPreference="SilentlyContinue"
+Stop-Transcript | out-null
+$ErrorActionPreference = "Continue"
+Start-Transcript -path <pathtotranscript.txt> -Append
+
+ForEach($computer in $Computers)
+{
+    Write-Output **** Starting $computer ****
+    Get-Date -format o 
+
+    New-Item -Path "\\$computer\c$\newfolder" -type directory -Force #create the destination if it doesn't exist.
+    
+    $destination= "\\$computer\C$\newfolder"
+    
+    try
+    {
+        Copy-Item -Path $fileToCopy -Destination $destination -verbose -recurse
+        Copy-Item -Path $fileToCopy2 -Destination $destination -verbose -recurse
+        Copy-Item -Path $fileToCopy3 -Destination $destination -verbose -recurse
+     
+    }      
+    catch {Write-Output $computer | out-file -append -filepath "path_to_failed.log"}
+    Get-Date -format o
+    Write-Output **** Finished $computer ****
+ }
+
+Stop-Transcript
+
+<# sample transcript
+Transcript started, output file is C:\scripts\transcript.txt
+****
+Starting
+aa.bb.cc.dd
+****
+2017-08-04T17:11:14.4450066+01:00
+
+
+    Directory: \\aa.bb.cc.dd\c$
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----       04/08/2017     17:11                temp
+VERBOSE: Performing the operation "Copy File" on target "Item: C:\FIRSTFILE.exe Destination: \\aa.bb.cc.ss\C$\temp\file1.exe".
+VERBOSE: Performing the operation "Copy File" on target "Item: C:\SECONDFILE.exe Destination: \\aa.bb.cc.ss\C$\temp\file2.exe".
+VERBOSE: Performing the operation "Copy File" on target "Item: C:\SECONDFILE.exe Destination: \\aa.bb.cc.ss\C$\temp\file3.exe".
+2017-08-04T17:17:52.1921028+01:00
+****
+Finished
+aa.bb.cc.dd
+**** #>
+<# sample fail.log (it's a list of hostnames or IP addresses depending on your input type)
+aa.bb.cc.de
+aa.bb.cc.df
+aa.bc.dd.ef
+#>
