@@ -1,0 +1,4 @@
+#constantly pings a device and outputs a failure with a timestamp
+
+filter timestamp {"$(Get-Date -Format o): $_"}
+ping -t TARGETMACHINE | Select-String timed | timestamp
