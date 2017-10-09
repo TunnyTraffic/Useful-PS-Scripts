@@ -1,1 +1,1 @@
-for ($i=100; $i -le 299; $i++) {write-host "APPSERVER$i , " -NoNewLine; [system.net.dns]::GetHostAddresses("APPSERVER" + [string]$i)[0].IpAddressToString;}
+for ($i=100; $i -le 299; $i++) {write-host "APPSERVER$i, " -NoNewLine; [system.net.dns]::GetHostAddresses("APPSERVER" + [string]$i)[0].IpAddressToString;}
