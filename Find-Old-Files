@@ -1,0 +1,6 @@
+<#
+.SYNOPSIS
+Find files older than <x> days for a given storage path, export findings to .csv
+#>
+$storagepath = "\\hostname\drive\startingdirectory"
+Get-ChildItem -Pth $storagepath -Include *.<specified file type> -File -Recurse | Where-Object {$_.Lastwritetime -lt (get-date).AddDays(<-x>)} | Select DirectoryName,Basename,Length,LastWriteTime | Export-csv -Path <outputpath\filename.csv -Encoding ascii -NoTypeInformation
