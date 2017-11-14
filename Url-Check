@@ -1,0 +1,29 @@
+$target="aaa.bbb.ccc.ddd" #ipaddress
+$tracefile="c:\temp\trace_$target_$(Get-Date -f yyyy-MM-dd_HHmm).etl"
+
+$response = ""
+
+Try
+{
+    netsh trace start ipv4.address="$target" report=yes capture=yes tracefile="$tracefile"
+
+    While(Test-Connection -ComputerName $target -Count 1 -ErrorAction Continue)
+    {
+        $response = Invoke-WebRequest $target -UseBasicParsing | Out-String
+        if ($response.Contains("HTTP/1.1 200 OK"))
+            {write-host "WebPage StatusCode = HTTP/1.1 200 OK. Test in progress on $target. Please do not close this window" -ForegroundColor Green}
+        $response = "" #clear out the response
+    }
+    $timestamp = Get-Date -Format o
+    write-host "test finished at $timestamp"   -ForegroundColor Red
+}
+Catch
+{
+    $timestamp = Get-Date -Format o
+    write-host "test finished at $timestamp" -ForegroundColor DarkCyan
+}
+Finally
+{
+    write-host "Send the logs, finished at $timestamp" -ForegroundColor Yellow 
+    netsh trace stop
+}
