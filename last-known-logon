@@ -1,0 +1,47 @@
+Param(
+    [Parameter(Mandatory=$true)][string]$SAMAccountName
+)
+
+Import-Module ActiveDirectory
+
+$User = Get-ADUser $SAMAccountName -Properties lastLogonTimestamp
+
+$lastLogons = @()
+
+$lastLogonTimestampAD = $User.lastLogonTimestamp
+if ($lastLogonTimestampAD -eq $null){
+    $lastLogonTimestamp = "Never Logged On"
+}else{
+    $lastLogonTimestamp = [datetime]::FromFileTime($lastLogonTimestampAD).ToString('g')
+}
+$objlastLogon = New-Object PSObject
+$objlastLogon | Add-Member -Type NoteProperty -Name "Domain Controller" -Value "LastLogonTimestamp"
+$objlastLogon | Add-Member -Type NoteProperty -Name "Last Logon" -Value $lastLogonTimestamp
+$objlastLogon | Add-Member -Type NoteProperty -Name "LastLogonAD" -Value $lastLogonTimestampAD
+$lastLogons += $objLastLogon
+
+$DomainControllers = Get-ADDomainController -Filter *
+$Count = 0
+
+foreach($dc in ($DomainControllers)){
+    $Count++
+    $PercentComplete = [math]::Round(($Count / $DomainControllers.Count) * 100)
+    Write-Progress -Activity "Getting Last Logon for $($User.Name) from $($dc.Name)..." -Status "Domain Controller $Count of $($DomainControllers.Count) ($PercentComplete)%" -PercentComplete $PercentComplete
+    $lastLogonAD = (Get-ADUser $User -Server $dc.Name -Properties lastLogon).lastLogon
+    if ($lastLogonAD -eq $null){
+        $lastLogonDate = "Never Logged On"
+    }else{
+        $lastLogonDate = [datetime]::FromFileTime($lastLogonAD).ToString('g')
+    }
+    $objlastLogon = New-Object PSObject
+    $objlastLogon | Add-Member -Type NoteProperty -Name "Domain Controller" -Value $dc.Name
+    $objlastLogon | Add-Member -Type NoteProperty -Name "Last Logon" -Value $lastLogonDate
+    $objlastLogon | Add-Member -Type NoteProperty -Name "LastLogonAD" -Value $lastLogonAD
+    $lastLogons += $objLastLogon
+}
+
+Write-Host
+Write-Host
+Write-Host "Last Logons From All Domain Controllers for $($User.Name):"
+
+$lastLogons | sort "LastLogonAD" -Descending | ft "Domain Controller","Last Logon"
