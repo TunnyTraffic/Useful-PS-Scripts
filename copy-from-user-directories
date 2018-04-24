@@ -4,10 +4,10 @@ $computers = Get-Content "vaultclients.txt"
 ForEach($computer in $Computers)
 {
  $users = Get-ChildItem "\\$computer\c$\users\" -dir -Name #list all members of c:\users
- ForEach($cctvuser in $users){ #for each user copy from version 1 to version 2
-    If ((Test-Path "\\$computer\c$\users\$cctvuser\AppData\Local\Application 2.0") -ne 1) {
-        MD "\\$computer\c$\users\$cctvuser\AppData\Local\Application 2.0\Vault"} # check if the destination exists, if not create it.
-    Copy-Item -Path "\\$computer\c$\users\$cctvuser\AppData\Local\Application 1.0\Vault\*.*" -Recurse -Destination "\\$computer\c$\users\$cctvuser\AppData\Local\Application 2.0\Vault" -force
+ ForEach($user in $users){ #for each user copy from version 1 to version 2
+    If ((Test-Path "\\$computer\c$\users\$user\AppData\Local\Application 2.0") -ne 1) {
+        MD "\\$computer\c$\users\$user\AppData\Local\Application 2.0\Vault"} # check if the destination exists, if not create it.
+    Copy-Item -Path "\\$computer\c$\users\$user\AppData\Local\Application 1.0\Vault\*.*" -Recurse -Destination "\\$computer\c$\users\$user\AppData\Local\Application 2.0\Vault" -force
  }
  $users = "" #clear users otherwise it fills up with every user from every machine.
 }
