@@ -20,7 +20,7 @@ ForEach($computer in $Computers)
     {
         Copy-Item -Path $fileToCopy -Destination $destination -verbose -recurse 
         invoke-command -ComputerName $computer -ScriptBlock {
-            Start-Process ($destination + $fileToCopy) -ArgumentList '/s /qn /v' -Wait #wait until it's completed otherwise the session will close and the installer with it
+            Start-Process ($destination + "\" + $fileToCopy) -ArgumentList '/s /qn /v' -Wait #wait until it's completed otherwise the session will close and the installer with it
         }
 
         Invoke-Command -ComputerName $computer -ScriptBlock {((Get-Item -path "updatedfile.file").VersionInfo.FileVersion)} # this one uses the file version of a dll as a post-install check
