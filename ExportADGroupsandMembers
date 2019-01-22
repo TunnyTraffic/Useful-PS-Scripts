@@ -1,0 +1,1 @@
+Get-ADgroup -Filter {(Name -like 'searchterm*')} -Properties Name,Description,DistinguishedName,Created,members | select name,Distinguishedname,Description,Created, @{n=’Members’; e= { ( $_.members | % {(Get-ADObject $_).Name }) -join “,” }} | Sort-Object -Property Name |Export-csv -path C:\scripts\output.csv -NoTypeInformation
